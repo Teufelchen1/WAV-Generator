@@ -1,0 +1,22 @@
+
+Field Name	Size (bytes)	Data Type	Value
+
+sGroupID	4		char[4]		“RIFF”	For WAV files, this value is always RIFF. RIFF stands for Resource Interchange File Format, and is not limited to WAV audio – RIFFs can also hold AVI video.
+dwFileLength	4/32		uint		varies	The total file size, in bytes, minus 8 (to ignore the text RIFF and WAVE in this header).
+sRiffType	4		char[4]		“WAVE”	For WAV files, this value is always WAVE.
+
+sGroupID	4		char[4]		“fmt “	Indicates the format chunk is defined below. Note the single space at the end to fill out the 4 bytes required here.
+dwChunkSize	32		uint		varies	The length of the rest of this chunk, in bytes (not including sGroupID or dwChunkSize).
+wFormatTag	16		ushort		1	For WAV files, this value is always 1 and indicates PCM format.
+wChannels	16		ushort		varies	Indicates the number of channels in the audio. 1 for mono, 2 for stereo, etc.
+dwSamplesPerSec	32		uint		varies	The sampling rate for the audio (e.g. 44100, 8000, 96000, depending on what you want).
+dwAvgBytesPerSec32		uint		sampleRate * blockAlign	The number of multichannel audio frames per second. Used to estimate how much memory is needed to play the file.
+wBlockAlign	16		ushort		wChannels * (dwBitsPerSample / 8)	The number of bytes in a multichannel audio frame.
+dwBitsPerSample	32		uint		varies	The bit depth (bits per sample) of the audio. Usually 8, 16, or 32.
+
+sGroupID	4 		bytes		char[4]	“data”	Indicates the data chunk is coming next.
+dwChunkSize	32		bytes	uint	varies	The length of the array below.
+sampleData	dwSamplesPerSec * wChannels * duration of audio in seconds	
+				byte[] (8-bit audio) 
+				short[] (16-bit audio) 
+				float[] (32-bit audio)	sample data
